@@ -1,0 +1,6 @@
+Flask==2.2.2
+Flask_Cors==3.0.10
+pydub==0.25.1
+soundfile==0.11.0
+speechbrain==0.5.13
+SpeechRecognition==3.9.0

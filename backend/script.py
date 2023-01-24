@@ -6,32 +6,18 @@ import os
 import io
 import soundfile
 from audio_tools import audiotools
+from db import users
+from utils import hashing
+db=users.Users()
 at=audiotools.AudioTools()
-# # convert mp3 file to wav                                                       
-# sound = AudioSegment.from_wav("./processed1.wav")
-# sound.export("transcript.wav", format="wav")
-
-
-# # transcribe audio file                                                         
-# AUDIO_FILE = "transcript.wav"
-
-# # use the audio file as the audio source                                        
-# r = sr.Recognizer()
-# with sr.AudioFile(AUDIO_FILE) as source:
-#         audio = r.record(source)  # read the entire audio file                  
-
-#         print("Transcription: " + r.recognize_google(audio))
-
-
 app = Flask(__name__)
 CORS(app)
 
 @app.post("/isuser")
 def isuser():
     username=request.form['username']
-    files = [f for f in os.listdir('.') if os.path.isfile(f)]
     response=None
-    if(f'{username}.wav' in files):
+    if(db.isUser(username)):
         response = jsonify("TRUE") 
     else:
         response = jsonify("FALSE")
@@ -43,14 +29,12 @@ def register():
     files = request.files
     file=files.get('file')
     username=request.form['username']
-    files = [f for f in os.listdir('.') if os.path.isfile(f)]
-    # Write the data to a file.
-    filepath = os.path.join("{}.wav".format(username))
+    password=hashing.genhash()
+    res=db.newUser(username,password)
+    os.chdir("audiodb/")
+    filepath = os.path.join("{}.wav".format(password))
     file.save(filepath)
-
-    # Jump back to the beginning of the file.
     file.seek(0)
-    # Read the audio data again.
     data, samplerate = soundfile.read(file)
     with io.BytesIO() as fio:
         soundfile.write(
@@ -73,6 +57,7 @@ def login():
     file=files.get('file')
     username=request.form['username']
     # Write the data to a file.
+    os.chdir("audiodb")
     filepath = os.path.join("received.wav")
     file.save(filepath)
 
@@ -89,7 +74,8 @@ def login():
             format='wav'
         )
         data = fio.getvalue()
-    result=at.identify(username)
+    hash=db.getUserHash(username)
+    result=at.identify(hash)
     response=None
     if(result):
         print('Access granted to ',username)

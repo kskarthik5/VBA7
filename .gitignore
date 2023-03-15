@@ -1,3 +1,6 @@
 /backend/__pycache__
 /backend/received.wav
 /backend/audiodb/*
+/frontend/node_modules
+/frontend/.next
+/backend/

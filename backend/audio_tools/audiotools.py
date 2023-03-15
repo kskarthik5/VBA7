@@ -13,9 +13,8 @@ class AudioTools:
         with sr.AudioFile(AUDIO_FILE) as source:
                 audio = self.sr.record(source)  # read the entire audio file                  
 
-                print("Transcription: " + self.sr.recognize_google(audio))
+                return self.sr.recognize_google(audio)
 
     def identify(self,username):
         score, prediction = self.verification.verify_files("received.wav", "{}.wav".format(username))
-        print(prediction, score)
         return prediction[0]

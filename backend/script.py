@@ -5,13 +5,27 @@ from flask_cors import CORS
 import os
 import io
 import soundfile
-from audio_tools import audiotools
 from db import users
+from audio_tools import audiotools
+from utils import randomwords
 from utils import hashing
 db=users.Users()
 at=audiotools.AudioTools()
 app = Flask(__name__)
 CORS(app)
+class Store:
+    def store(self,val):
+        self.val=val
+curr=Store()
+
+@app.post("/genWords")
+def genWords():
+    temp=randomwords.genWords(4)
+    print(temp)
+    curr.store(temp)
+    response = jsonify(temp)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.post("/isuser")
 def isuser():
@@ -45,6 +59,7 @@ def register():
             format='wav'
         )
         data = fio.getvalue()
+    os.chdir("../")
     print('voice registered for ',username)
     response = jsonify("DONE")
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -75,9 +90,12 @@ def login():
         )
         data = fio.getvalue()
     hash=db.getUserHash(username)
+    recd=at.transcript()
     result=at.identify(hash)
     response=None
-    if(result):
+    print(curr.val,recd)
+    os.chdir("../")
+    if(result and curr.val.lower()==recd.lower()):
         print('Access granted to ',username)
         response = jsonify("SUCCESS")
     else:
@@ -86,3 +104,6 @@ def login():
     response.headers.add('Access-Control-Allow-Origin', '*')
 
     return response
+
+def main():
+	app.run()

@@ -12,6 +12,7 @@ from utils import hashing
 db=users.Users()
 at=audiotools.AudioTools()
 app = Flask(__name__)
+cwd=os.getcwd()
 CORS(app)
 class Store:
     def store(self,val):
@@ -45,7 +46,7 @@ def register():
     username=request.form['username']
     password=hashing.genhash()
     res=db.newUser(username,password)
-    os.chdir("audiodb/")
+    os.chdir(cwd+"/audiodb/")
     filepath = os.path.join("{}.wav".format(password))
     file.save(filepath)
     file.seek(0)
@@ -59,7 +60,6 @@ def register():
             format='wav'
         )
         data = fio.getvalue()
-    os.chdir("../")
     print('voice registered for ',username)
     response = jsonify("DONE")
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -72,7 +72,7 @@ def login():
     file=files.get('file')
     username=request.form['username']
     # Write the data to a file.
-    os.chdir("audiodb")
+    os.chdir(cwd+"/audiodb/")
     filepath = os.path.join("received.wav")
     file.save(filepath)
 
@@ -94,7 +94,6 @@ def login():
     result=at.identify(hash)
     response=None
     print(curr.val,recd)
-    os.chdir("../")
     if(result and curr.val.lower()==recd.lower()):
         print('Access granted to ',username)
         response = jsonify("SUCCESS")
@@ -104,6 +103,5 @@ def login():
     response.headers.add('Access-Control-Allow-Origin', '*')
 
     return response
-
 def main():
 	app.run()

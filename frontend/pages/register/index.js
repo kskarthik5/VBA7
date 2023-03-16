@@ -13,11 +13,18 @@ export default function Register() {
             body: data
         }).then(response => response.json()).then(res => { if(res==='TRUE'){return true} else return false }).catch(err => console.log(err));
     }
+    function fetchWords(username) {
+        var data = new FormData()
+        data.append('username', username)
+        return fetch('http://localhost:5000/genWords', {
+            method: "POST",
+            body: data
+        }).then(response => response.json()).then(res => { return res }).catch(err => console.log(err));
+    }
     const username=useRef(null)
     const [title,setTitle]=useState('Choose a username')
+    const [words, setWords] = useState([])
     async function handleUsernameSubmit(){
-        //to do - fetch backend to verify if user exists or not
-        //switch current section on success
         let val=username.current.value
         let res=await fetchuser(val)
         if(!val)
@@ -26,8 +33,9 @@ export default function Register() {
             alert('User exists')
             return
         }
-        
-        setTitle('Record your voice')
+        let tempw=await fetchWords(val)
+        setTitle(tempw)
+        setWords(tempw)
         setCurr(<Recorder username={val} method={'register'}/>)
     }
     const usernameSection=(<div className={styles.inputsection}>

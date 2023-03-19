@@ -7,8 +7,7 @@ class AudioTools:
         self.verification = SpeakerRecognition.from_hparams(source="speechbrain/spkrec-ecapa-voxceleb", savedir="pretrained_models/spkrec-ecapa-voxceleb")
         self.sr = sr.Recognizer()
 
-    def transcript(self):
-                                                        
+    def transcript(self):                       
         AUDIO_FILE = "received.wav"                        
         with sr.AudioFile(AUDIO_FILE) as source:
                 audio = self.sr.record(source)  # read the entire audio file                  

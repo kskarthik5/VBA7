@@ -3,6 +3,8 @@ import RecordRTC, { invokeSaveAsDialog, StereoAudioRecorder } from 'recordrtc';
 import styles from '../../styles/Home.module.css'
 export default function Recorder({ username, method }) {
     const [audioBlob, setAudioBlob] = useState()
+    const [pBar,showPBar]=useState(false)
+    const [pWidth,setPWidth]=useState(100)
     useEffect(() => {
         if (audioBlob) {
             var data = new FormData()
@@ -13,7 +15,9 @@ export default function Recorder({ username, method }) {
                 body: data
             })
             .then(response => response.json())
-            .then(res => { setButtonText(res) 
+            .then(res => { 
+                showPBar(false)
+                setButtonText(res) 
                 if(res==='SUCCESS') setButtonColor('greenyellow')
              else setButtonColor('red')})
             .catch(err => console.log(err));
@@ -30,8 +34,16 @@ export default function Recorder({ username, method }) {
                 mimeType: 'audio/wav',
             });
             recorder.startRecording();
+            showPBar(true)
             const sleep = m => new Promise(r => setTimeout(r, m));
+            const i=setInterval(()=>{
+                setPWidth(s=>{
+                    return s-1
+                })
+            },45)
             await sleep(5000);
+            clearInterval(i)
+            
             recorder.stopRecording(function () {
                 let blob = recorder.getBlob();
                 setAudioBlob(blob)
@@ -49,6 +61,7 @@ export default function Recorder({ username, method }) {
     const [buttonText, setButtonText] = useState('RECORD')
     const [buttonColor, setButtonColor] = useState('orange')
     return (<div className={styles.voicesection}>
+        {pBar && <div className={styles.progressbar} style={{ width:`${pWidth}%`}}></div>}
         <button onClick={handleRecordClick} style={{ backgroundColor: buttonColor }}>{buttonText}</button>
     </div>)
 }

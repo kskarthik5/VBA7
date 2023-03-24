@@ -6,6 +6,14 @@
   padding: 6rem;
   min-height: 100vh;
 }
+.progressbar{
+  background-color: green;
+  width: 100vw;
+  height: 2vh;
+  display: flex;
+  position: absolute;
+  top:0%
+}
 .inputsection{
   display: flex;
   flex-direction: row;
@@ -238,6 +246,8 @@
     );
     z-index: 1;
   }
+
+  
 }
 
 /* Tablet and Smaller Desktop */

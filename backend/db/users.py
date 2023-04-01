@@ -1,8 +1,8 @@
 import pymongo
-
+from os import environ
 class Users:
     def __init__(self):
-        self.myclient = pymongo.MongoClient("mongodb+srv://admin:superduperSecurePassw0rd@cluster0.fxmhw.mongodb.net/?retryWrites=true&w=majority")
+        self.myclient = pymongo.MongoClient(environ['MongoSecret'])
         self.mydb = self.myclient["myFirstDatabase"]
         self.mycol=self.mydb['VBA7users']
         print("User DB is active")

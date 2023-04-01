@@ -1,6 +1,6 @@
 import random
  
-list = ["steel","pink","around","bird","flight","mouse","sky","orange","fetch","branch","tree","store","garden"]
+list = ["steel","pink","around","bird","flight","mouse","sky","orange","apple","branch","green","store","garden"]
  
 
 def genWords(n): 

@@ -9,7 +9,7 @@ readme = "README.md"
 dev = "vbabackend:main"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 speechbrain = "^0.5.13"
 speechrecognition = "^3.10.0"
 soundfile = "^0.12.1"

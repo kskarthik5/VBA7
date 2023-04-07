@@ -92,8 +92,9 @@ def login():
     hash=db.getUserHash(username)
     recd=at.transcript()
     result=at.identify(hash)
+    print("IDENTIFICATION:",result)
     response=None
-    print(curr.val,recd)
+    print("GEN:",curr.val,"\n","RECD:",recd)
     if(result and curr.val.lower()==recd.lower()):
         print('Access granted to ',username)
         response = jsonify("SUCCESS")

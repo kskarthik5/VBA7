@@ -14,6 +14,6 @@ class AudioTools:
 
                 return self.sr.recognize_google(audio)
 
-    def identify(self,username):
-        score, prediction = self.verification.verify_files("received.wav", "{}.wav".format(username))
+    def identify(self,hash):
+        score, prediction = self.verification.verify_files("received.wav", "{}.wav".format(hash))
         return prediction[0]

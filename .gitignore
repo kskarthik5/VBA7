@@ -4,3 +4,6 @@
 /backend/devenv.py
 /frontend/node_modules
 /frontend/.next
+/backend/audio_tools/__pycache__/
+/backend/audio_tools/__pycache__/
+/dist/

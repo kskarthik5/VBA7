@@ -1,6 +1,6 @@
 /backend/__pycache__
 /backend/received.wav
 /backend/audiodb/*
-/backend/env.sh
+/backend/devenv.py
 /frontend/node_modules
 /frontend/.next
